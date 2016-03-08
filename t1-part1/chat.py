@@ -1,22 +1,22 @@
 from bottle import run, get, post, view, request, redirect
 
 messages = [("Nobody", "Hello!")]
-nick = "Nobody"
 
 @get('/')
 @view('index')
 def index():
-    return {'messages': messages, 'nick': nick}
+	return{'nick':'Anonymous', 'messages': messages}
 
+@get('/<nick>')
+@view('index')
+def index(nick):
+	return {'nick': nick, 'messages': messages} 
 
 @post('/send')
 def sendMessage():
-    global nick
     m = request.forms.get('message')
     n = request.forms.get('nick')
     messages.append([n, m])
-    nick = n
-    redirect('/')
-
+    redirect('/'+n)
 
 run(host='localhost', port=8080)
